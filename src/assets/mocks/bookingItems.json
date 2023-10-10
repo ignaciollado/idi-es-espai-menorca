@@ -1,0 +1,70 @@
+[
+    {
+      "start": "subDays(startOfDay(new Date()), 1)",
+      "end": "addDays(new Date(), 1)",
+      "title": "Reserva Pavellón A",
+      "color": "pavellonA",
+      "allDay": true,
+      "resizable": {
+        "beforeStart": false,
+        "afterEnd": true
+      },
+      "draggable": false
+    },
+    {
+      start: subDays(startOfDay(new Date()), 0),
+      end: addDays(new Date(), 0),
+      title: 'Reserva Pavellón B',
+      color: 'pavellonB',
+      allDay: true,
+      resizable: {
+        beforeStart: false,
+        afterEnd: true
+      },
+      draggable: false
+    },
+    {
+      "start": addHours(startOfDay(setDay(new Date(), 3)), 14),
+      "end": subSeconds(addHours(startOfDay(setDay(new Date(), 3)), 16), 1),
+      title: "Reserva Sala GROGA",
+      color: "yellow",
+      resizable: {
+        beforeStart: false,
+        afterEnd: true
+      },
+      draggable: false
+    },
+    {
+      "start": addHours(startOfDay(setDay(new Date(), 3)), 17),
+      "end": subSeconds(addHours(startOfDay(setDay(new Date(), 3)), 18), 1),
+      title: "Reserva sala BLAVA",
+      color: "blue",
+      resizable: {
+        beforeStart: false,
+        afterEnd: true
+      },
+      draggable: false
+    },
+    {
+      "start": addHours(startOfDay(setDay(new Date(), 3)), 10),
+      "end": subSeconds(addHours(startOfDay(setDay(new Date(), 3)), 11), 1),
+      title: "Reserva sala VERMELLA",
+      color: "red",
+      resizable: {
+        beforeStart: false,
+        afterEnd: true
+      },
+      draggable: this.isDragable,
+    },
+    {
+      "start": addHours(startOfDay(setDay(new Date(), 3)), 8),
+      "end": subSeconds(addHours(startOfDay(setDay(new Date(), 3)), 9), 1),
+      title: "Reserva sala BLANCA",
+      color: "white",
+      resizable: {
+        beforeStart: false,
+        afterEnd: true
+      },
+      draggable: this.isDragable,
+    },
+  ];
