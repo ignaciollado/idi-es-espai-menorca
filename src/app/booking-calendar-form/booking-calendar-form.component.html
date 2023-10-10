@@ -1,0 +1,57 @@
+
+<div class="container">
+  <ul class="nav nav-pills nav-fill gap-2 p-1 small bg-primary rounded-5 shadow-sm" id="pillNav2" role="tablist" style="--bs-nav-link-color: var(--bs-white); --bs-nav-pills-link-active-color: var(--bs-primary); --bs-nav-pills-link-active-bg: var(--bs-white);">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active rounded-5" id="home-tab2" data-bs-toggle="tab" type="button" role="tab" aria-selected="true">Booking area</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link rounded-5" id="profile-tab2" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">Profile</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link rounded-5" id="contact-tab2" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">Contact</button>
+    </li>
+  </ul>
+  
+  <form 
+    [formGroup]="bookingForm" 
+    (ngSubmit)="onSubmit(bookingForm)"
+    *ngIf="bookingForm"
+    >
+    <section>
+      <mat-form-field appearance="fill" [style.width.px]=327>
+        <mat-label>Please, select the resource to book</mat-label>
+        <mat-select [formControl]="resourceToBook">
+          <mat-option value="white#room">Sala BLANCA</mat-option>
+          <mat-option value="yellow#room">Sala GROGA</mat-option>
+          <mat-option value="red#room">Sala VERMELLA</mat-option>
+          <mat-option value="blue#room">Sala BLAVA</mat-option>
+          <mat-option value="A#pavillion">Pavellón A</mat-option>
+          <mat-option value="B#pavillion">Pavellón B</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </section>
+    <section>
+      <mat-form-field>
+        <input matInput [matDatepicker]="pickerFromDate" placeholder="From date" [formControl]="fromDate">
+        <mat-datepicker-toggle matSuffix [for]="pickerFromDate"></mat-datepicker-toggle>
+        <mat-datepicker #pickerFromDate ></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput [matDatepicker]="pickerToDate" placeholder="To date" [formControl]="toDate">
+        <mat-datepicker-toggle matSuffix [for]="pickerToDate"></mat-datepicker-toggle>
+        <mat-datepicker #pickerToDate ></mat-datepicker>
+      </mat-form-field>
+    </section>
+      
+    <section class="button-row">
+      <button mat-raised-button color="primary" type="submit"  [disabled]="!bookingForm.valid">Send</button>
+    </section>
+    <!-- <p>Your booking JSON: {{ bookingForm.value | json }}</p> -->
+    <p>Your booking request: {{ bookingForm.value | formatBooking:1 }}</p>
+    <p>Booking Status: {{ bookingForm.status }}</p>
+  </form>
+
+  <app-booking-calendar-child [bookingData]=bookingForm.value (bookingResponse)=9></app-booking-calendar-child>
+
+</div>
+  
