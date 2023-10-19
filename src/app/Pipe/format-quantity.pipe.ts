@@ -25,7 +25,7 @@ export class FormatBookingPipe implements PipeTransform {
     } 
     
     theBooking = value
-    console.log (theBooking['resourceToBook'], theBooking['fromDate'], theBooking['toDate'])
+    /* console.log (theBooking['resourceToBook'], theBooking['fromDate'], theBooking['toDate']) */
    
     let type: number = args[0];
 

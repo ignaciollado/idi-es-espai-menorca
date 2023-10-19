@@ -1,25 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ViewEncapsulation, Input 
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, Input, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import {
-  CalendarEvent,
-  CalendarEventTimesChangedEvent,
-  CalendarView,
-} from 'angular-calendar';
+import { CalendarEvent, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
 import { colors } from '../utils/colors';
-
-import {
-  addDays,
-  addHours,
-  isSameDay,
-  setDay,
-  startOfDay,
-  subDays,
-  subSeconds,
-} from 'date-fns';
+import { addDays, addHours, isSameDay, setDay, startOfDay, subDays, subSeconds,} from 'date-fns';
 
 @Component({
   selector: 'app-booking-calendar-child',
@@ -37,6 +20,11 @@ export class BookingCalendarChildComponent {
   isafterEnd: boolean = false
   @Input() bookingData: string = ""
 
+  ngOnInit() {
+    alert (this.bookingData)
+  }
+  
+  
   events: CalendarEvent[] = [
     {
       start: subDays(startOfDay(new Date()), 1),

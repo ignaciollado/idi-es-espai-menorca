@@ -20,7 +20,7 @@
     <section>
       <mat-form-field appearance="fill" [style.width.px]=327>
         <mat-label>Please, select the resource to book</mat-label>
-        <mat-select [formControl]="resourceToBook">
+        <mat-select [formControl]="resourceToBook" #theResource (change)='resourceSelected(theResource.value)'>
           <mat-option value="white#room">Sala BLANCA</mat-option>
           <mat-option value="yellow#room">Sala GROGA</mat-option>
           <mat-option value="red#room">Sala VERMELLA</mat-option>
@@ -32,14 +32,24 @@
     </section>
     <section>
       <mat-form-field>
-        <input matInput [matDatepicker]="pickerFromDate" placeholder="From date" [formControl]="fromDate">
-        <mat-datepicker-toggle matSuffix [for]="pickerFromDate"></mat-datepicker-toggle>
-        <mat-datepicker #pickerFromDate ></mat-datepicker>
+        <input readonly matInput [matDatepicker]="pickerFromDate" placeholder="From date" 
+                                  [formControl]="fromDate" 
+                                  [min]="minDate" 
+                                  [matDatepickerFilter]="weekEndFilter">
+        <mat-datepicker-toggle matSuffix [for]="pickerFromDate">
+
+        </mat-datepicker-toggle>
+        <mat-datepicker #pickerFromDate [startAt]="minDate"></mat-datepicker>
       </mat-form-field>
+
       <mat-form-field>
-        <input matInput [matDatepicker]="pickerToDate" placeholder="To date" [formControl]="toDate">
-        <mat-datepicker-toggle matSuffix [for]="pickerToDate"></mat-datepicker-toggle>
-        <mat-datepicker #pickerToDate ></mat-datepicker>
+        <input readonly matInput [matDatepicker]="pickerToDate" placeholder="To date" [formControl]="toDate" 
+                                                                              [min]="minDateTo" 
+                                                                              [matDatepickerFilter]="weekEndFilter">
+        <mat-datepicker-toggle matSuffix [for]="pickerToDate">
+
+        </mat-datepicker-toggle>
+        <mat-datepicker #pickerToDate [startAt]="minDateTo"></mat-datepicker>
       </mat-form-field>
     </section>
       
@@ -47,7 +57,7 @@
       <button mat-raised-button color="primary" type="submit"  [disabled]="!bookingForm.valid">Send</button>
     </section>
     <!-- <p>Your booking JSON: {{ bookingForm.value | json }}</p> -->
-    <p>Your booking request: {{ bookingForm.value | formatBooking:1 }}</p>
+    <div>Your booking request is: {{ bookingForm.value | formatBooking:1 }}</div>
     <p>Booking Status: {{ bookingForm.status }}</p>
   </form>
 

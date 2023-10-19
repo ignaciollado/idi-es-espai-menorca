@@ -10,12 +10,12 @@ import { UtilsModule } from "./utils/module";
 import { FormatBookingPipe } from './Pipe/format-quantity.pipe';
 import { BookingCalendarFormComponent } from './booking-calendar-form/booking-calendar-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatNativeDateModule} from '@angular/material/core';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatSelectModule} from '@angular/material/select';
-import {MatInputModule } from '@angular/material/input';
-import {MatButtonModule} from '@angular/material/button';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 import { BookingCalendarChildComponent } from './booking-calendar-child/booking-calendar-child.component';
 
 
@@ -38,6 +38,7 @@ import { BookingCalendarChildComponent } from './booking-calendar-child/booking-
         MatSelectModule,
         MatInputModule,
         MatButtonModule,
+        
         ServiceWorkerModule.register('ngsw-worker.js', {
             enabled: !isDevMode(),
             // Register the ServiceWorker as soon as the application is stable
