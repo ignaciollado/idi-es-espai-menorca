@@ -19,10 +19,6 @@ export class BookingCalendarChildComponent {
   isbeforeStart: boolean = false
   isafterEnd: boolean = false
   @Input() bookingData: string = ""
-
-  ngOnInit() {
-    alert (this.bookingData)
-  }
   
   
   events: CalendarEvent[] = [
@@ -135,7 +131,7 @@ export class BookingCalendarChildComponent {
     return true;
   };
 
-  eventTimesChanged(
+  eventTimesChanged (
     eventTimesChangedEvent: CalendarEventTimesChangedEvent
   ): void {
     delete eventTimesChangedEvent.event.cssClass;
