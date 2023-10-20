@@ -6,8 +6,20 @@
   <form 
     [formGroup]="bookingForm" 
     (ngSubmit)="onSubmit()"
-    *ngIf="bookingForm"
-    >
+    *ngIf="bookingForm">
+
+    <section>
+      <mat-form-field appearance="fill" [style.width.px]=327>
+        <input matInput placeholder="Your name" [formControl]="bookerName">
+      </mat-form-field>
+      <mat-form-field appearance="fill" [style.width.px]=327>
+        <input matInput placeholder="Your email address" [formControl]="bookerEMail">
+        <mat-error *ngIf="bookerEMail.hasError('email') && !bookerEMail.hasError('required')">
+          Please enter a valid email address
+        </mat-error>
+      </mat-form-field>
+    </section>
+
     <section>
       <mat-form-field appearance="fill" [style.width.px]=327>
         <mat-label>Please, select the resource to book</mat-label>
@@ -23,7 +35,7 @@
     </section>
 
     <section>
-      <mat-form-field>
+      <mat-form-field appearance="fill" [style.width.px]=327>
         <input readonly matInput [matDatepicker]="pickerFromDate" placeholder="From date" 
                                   [formControl]="fromDate" 
                                   [min]="minDate" 
@@ -34,7 +46,7 @@
         <mat-datepicker #pickerFromDate [startAt]="minDate"></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field>
+      <mat-form-field appearance="fill" [style.width.px]=327>
         <input readonly matInput [matDatepicker]="pickerToDate" placeholder="To date" [formControl]="toDate" 
                                                                               [min]="minDateTo" 
                                                                               [matDatepickerFilter]="weekEndFilter">

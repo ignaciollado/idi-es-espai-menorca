@@ -6,7 +6,6 @@ import { Subject } from 'rxjs';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
 import { colors } from '../utils/colors';
 import { addDays, addHours, endOfDay, isSameDay, isSameMonth, setDay, startOfDay, subDays, subSeconds, } from 'date-fns';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-booking-calendar-child',
@@ -25,7 +24,9 @@ export class BookingCalendarChildComponent {
   maxDate: Date;
   fromDate: FormControl
   toDate: FormControl
-  resourceToBook: UntypedFormControl 
+  resourceToBook: UntypedFormControl
+  bookerName: UntypedFormControl
+  bookerEMail: UntypedFormControl
   bookingForm: UntypedFormGroup
   modal: any;
   
@@ -50,8 +51,12 @@ export class BookingCalendarChildComponent {
     this.fromDate = new FormControl<Date | null>(null, [ Validators.required ])
     this.toDate = new FormControl<Date | null>(null, [ Validators.required])
     this.resourceToBook = new UntypedFormControl('', [ Validators.required ])
+    this.bookerName = new UntypedFormControl('', [ Validators.required, Validators.minLength(3), Validators.maxLength(60) ])
+    this.bookerEMail = new UntypedFormControl('', [ Validators.required, Validators.email ])
 
     this.bookingForm = this.formBuilder.group ({
+      bookerName: this.bookerName,
+      bookerEMail: this.bookerEMail,
       resourceToBook: this.resourceToBook,
       fromDate: this.fromDate,
       toDate: this.toDate,
@@ -68,6 +73,14 @@ export class BookingCalendarChildComponent {
       this.resourceSelected(e.resourceToBook);
     });
 
+  }
+
+  ngOnInit() {
+    this.loadBookingList()
+  }
+
+  private loadBookingList() {
+     this.events = []
   }
 
   public resourceSelected( resource: string ) {
@@ -111,7 +124,7 @@ export class BookingCalendarChildComponent {
     },
   ];
   
-events: CalendarEvent[] = [
+  events: CalendarEvent[] = [
     {
       start: subDays(startOfDay(new Date()), 1),
       end: addDays(new Date(), 1),
@@ -305,7 +318,7 @@ events: CalendarEvent[] = [
     this.events = [
       ...this.events,
       {
-        title: this.resourceToBook.value+"...PENDING",
+        title: this.resourceToBook.value+"<br>...PENDING CONFIRMATION !!!",
         start: startOfDay(this.fromDate.value),
         end: endOfDay(this.toDate.value),
         color: colors.grey,
