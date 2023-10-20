@@ -34,25 +34,33 @@
       </mat-form-field>
     </section>
 
+   <!--  <section>
+      <mat-form-field>
+        <input matInput [ngxMatDatetimePicker]="picker" placeholder="Choose a date" [formControl]="fromDate"
+          [min]="minDate" [max]="maxDate" [disabled]="disabled">
+        <ngx-mat-datepicker-toggle matSuffix [for]="picker"></ngx-mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+          [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
+          [color]="color" [enableMeridian]="enableMeridian" [disableMinute]="disableMinute" [hideTime]="hideTime">
+        </ngx-mat-datetime-picker>
+      </mat-form-field>
+    </section> -->
+
     <section>
       <mat-form-field appearance="fill" [style.width.px]=327>
-        <input readonly matInput [matDatepicker]="pickerFromDate" placeholder="From date" 
+        <input matInput [matDatepicker]="pickerFromDate" placeholder="From date" 
                                   [formControl]="fromDate" 
                                   [min]="minDate" 
                                   [matDatepickerFilter]="weekEndFilter">
-        <mat-datepicker-toggle matSuffix [for]="pickerFromDate">
-
-        </mat-datepicker-toggle>
+        <mat-datepicker-toggle matSuffix [for]="pickerFromDate"></mat-datepicker-toggle>
         <mat-datepicker #pickerFromDate [startAt]="minDate"></mat-datepicker>
       </mat-form-field>
 
       <mat-form-field appearance="fill" [style.width.px]=327>
-        <input readonly matInput [matDatepicker]="pickerToDate" placeholder="To date" [formControl]="toDate" 
+        <input matInput [matDatepicker]="pickerToDate" placeholder="To date" [formControl]="toDate" 
                                                                               [min]="minDateTo" 
                                                                               [matDatepickerFilter]="weekEndFilter">
-        <mat-datepicker-toggle matSuffix [for]="pickerToDate">
-
-        </mat-datepicker-toggle>
+        <mat-datepicker-toggle matSuffix [for]="pickerToDate"></mat-datepicker-toggle>
         <mat-datepicker #pickerToDate [startAt]="minDateTo"></mat-datepicker>
       </mat-form-field>
     </section>

@@ -1,7 +1,7 @@
 export const colors: any = {
     grey: {
       primary: '#808080',
-      secondary: '#FFFFFF',
+      secondary: '#e3bc08',
     },
     red: {
       primary: '#FF0000',

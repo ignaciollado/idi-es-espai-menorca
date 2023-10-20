@@ -18,7 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { BookingCalendarChildComponent } from './booking-calendar-child/booking-calendar-child.component';
-
+import { NgxMatDatetimePickerModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
 
 @NgModule({
     declarations: [
@@ -40,6 +40,8 @@ import { BookingCalendarChildComponent } from './booking-calendar-child/booking-
         MatSelectModule,
         MatInputModule,
         MatButtonModule,
+        NgxMatDatetimePickerModule,
+        NgxMatTimepickerModule,
         
         ServiceWorkerModule.register('ngsw-worker.js', {
             enabled: !isDevMode(),

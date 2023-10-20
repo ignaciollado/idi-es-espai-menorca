@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation, Inject, TemplateRef, EventEmitter, ViewChild } from '@angular/core';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { FormControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-
 import { Subject } from 'rxjs';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
 import { colors } from '../utils/colors';
 import { addDays, addHours, endOfDay, isSameDay, isSameMonth, setDay, startOfDay, subDays, subSeconds, } from 'date-fns';
+import { ThemePalette } from '@angular/material/core';
 
 @Component({
   selector: 'app-booking-calendar-child',
@@ -29,7 +29,19 @@ export class BookingCalendarChildComponent {
   bookerEMail: UntypedFormControl
   bookingForm: UntypedFormGroup
   modal: any;
-  
+
+  public disabled = false;
+  public showSpinners = true;
+  public showSeconds = false;
+  public stepHour = 1;
+  public stepMinute = 1;
+  public stepSecond = 1;
+  public enableMeridian = false;
+  public touchUi = false;
+  public disableMinute = false;
+  public hideTime = false;
+  public color: ThemePalette = 'primary';
+
   constructor(
     private formBuilder: UntypedFormBuilder,
     private _adapter: DateAdapter<any>,
