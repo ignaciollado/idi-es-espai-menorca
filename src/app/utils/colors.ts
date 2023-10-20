@@ -1,15 +1,15 @@
 export const colors: any = {
     red: {
-      primary: '#FFFFFF',
-      secondary: '#FF0000',
+      primary: '#FF0000',
+      secondary: '#FFFFFF',
     },
     blue: {
-      primary: '#FFFFFF',
-      secondary: '#0000FF',
+      primary: '#0000FF',
+      secondary: '#FFFFFF',
     },
     yellow: {
-      primary: '#FFFFFF',
-      secondary: '#FFD600',
+      primary: '#FFD600',
+      secondary: '#FFFFFF',
     },
     white: {
       primary: '#000000',

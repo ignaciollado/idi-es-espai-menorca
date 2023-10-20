@@ -1,6 +1,7 @@
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -8,7 +9,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { UtilsModule } from "./utils/module";
 import { FormatBookingPipe } from './Pipe/format-quantity.pipe';
-import { BookingCalendarFormComponent } from './booking-calendar-form/booking-calendar-form.component';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -22,7 +23,7 @@ import { BookingCalendarChildComponent } from './booking-calendar-child/booking-
 @NgModule({
     declarations: [
         AppComponent,
-        BookingCalendarFormComponent,
+       
         FormatBookingPipe,
         BookingCalendarChildComponent,
     ],
@@ -32,6 +33,7 @@ import { BookingCalendarChildComponent } from './booking-calendar-child/booking-
         BrowserModule,
         AppRoutingModule,
         ReactiveFormsModule,
+        FormsModule,
         MatDatepickerModule,
         MatNativeDateModule,
         MatFormFieldModule,

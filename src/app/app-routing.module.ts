@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { BookingCalendarFormComponent } from './booking-calendar-form/booking-calendar-form.component';
+import { BookingCalendarChildComponent } from './booking-calendar-child/booking-calendar-child.component';
 
 const routes: Routes = [];
 
@@ -9,5 +9,5 @@ const routes: Routes = [];
   exports: [RouterModule]
 })
 export class AppRoutingModule { 
-  routes = [{ path: '**', component: BookingCalendarFormComponent }]
+  routes = [{ path: '**', component: BookingCalendarChildComponent }]
 }

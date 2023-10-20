@@ -1,8 +1,12 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, Inject, TemplateRef, EventEmitter, ViewChild } from '@angular/core';
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { FormControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+
 import { Subject } from 'rxjs';
-import { CalendarEvent, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
+import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
 import { colors } from '../utils/colors';
-import { addDays, addHours, isSameDay, setDay, startOfDay, subDays, subSeconds,} from 'date-fns';
+import { addDays, addHours, endOfDay, isSameDay, isSameMonth, setDay, startOfDay, subDays, subSeconds, } from 'date-fns';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-booking-calendar-child',
@@ -13,15 +17,101 @@ import { addDays, addHours, isSameDay, setDay, startOfDay, subDays, subSeconds,}
 })
 
 export class BookingCalendarChildComponent {
-  view: CalendarView = CalendarView.Week
-  viewDate: Date = new Date()
+
+  @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any> | undefined;
+
+  minDate: Date;
+  minDateTo: Date;
+  maxDate: Date;
+  fromDate: FormControl
+  toDate: FormControl
+  resourceToBook: UntypedFormControl 
+  bookingForm: UntypedFormGroup
+  modal: any;
+  
+  constructor(
+    private formBuilder: UntypedFormBuilder,
+    private _adapter: DateAdapter<any>,
+    @Inject(MAT_DATE_LOCALE) private _locale: string,
+
+    ) {
+
+    this._locale = 'ca-ES'; /* 'es-ES' */
+    this._adapter.setLocale(this._locale)
+
+    const currentYear = new Date().getFullYear()
+    const currentMonth = new Date().getMonth()
+    const currentDay = new Date().getDate()
+
+    this.minDate = new Date(currentYear, currentMonth, currentDay)
+    this.minDateTo = this.minDate 
+    this.maxDate = new Date(currentYear + 1, 11, 31)
+
+    this.fromDate = new FormControl<Date | null>(null, [ Validators.required ])
+    this.toDate = new FormControl<Date | null>(null, [ Validators.required])
+    this.resourceToBook = new UntypedFormControl('', [ Validators.required ])
+
+    this.bookingForm = this.formBuilder.group ({
+      resourceToBook: this.resourceToBook,
+      fromDate: this.fromDate,
+      toDate: this.toDate,
+    })
+
+    this.bookingForm.valueChanges.subscribe((e) => {
+      console.log (e)
+    
+      const currentYearTo = new Date(e.fromDate).getFullYear()
+      const currentMonthTo = new Date(e.fromDate).getMonth()
+      const currentDayTo = new Date(e.fromDate).getDate()
+  
+      this.minDateTo = new Date(currentYearTo, currentMonthTo, currentDayTo)
+      this.resourceSelected(e.resourceToBook);
+    });
+
+  }
+
+  public resourceSelected( resource: string ) {
+
+    if (resource.split("#")[1] === 'room') {
+      //alert (`vas a reservar la sala ${resource.split("#")[0]}, hay que cambiar el tipo de datepicker`)
+    } else if (resource.split("#")[1] === 'pavillion') {
+      //alert (`vas a reservar el pavellón ${resource.split("#")[0]}`)
+    }
+    
+  }
+
+  view: CalendarView = CalendarView.Month
+
   isDragable: boolean = false
   isbeforeStart: boolean = false
   isafterEnd: boolean = false
-  @Input() bookingData: string = ""
+  CalendarView = CalendarView
+  viewDate: Date = new Date()
+
+  modalData?: {
+    action: string;
+    event: CalendarEvent;
+  }
   
+  actions: CalendarEventAction[] = [
+    {
+      label: '<i class="fas fa-fw fa-pencil-alt"></i>',
+      a11yLabel: 'Edit',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.handleEvent('Edited', event);
+      },
+    },
+    {
+      label: '<i class="fas fa-fw fa-trash-alt"></i>',
+      a11yLabel: 'Delete',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.events = this.events.filter((iEvent) => iEvent !== event);
+        this.handleEvent('Deleted', event);
+      },
+    },
+  ];
   
-  events: CalendarEvent[] = [
+events: CalendarEvent[] = [
     {
       start: subDays(startOfDay(new Date()), 1),
       end: addDays(new Date(), 1),
@@ -92,7 +182,46 @@ export class BookingCalendarChildComponent {
     },
   ];
 
+  /* events: CalendarEvent[] = [] */
+
+  activeDayIsOpen: boolean = true;
+
   refresh = new Subject<void>();
+
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    if (isSameMonth(date, this.viewDate)) {
+      if (
+        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+        events.length === 0
+      ) {
+        this.activeDayIsOpen = false;
+      } else {
+        this.activeDayIsOpen = true;
+      }
+      this.viewDate = date;
+    }
+  }
+  eventTimesChanged({
+    event,
+    newStart,
+    newEnd,
+  }: CalendarEventTimesChangedEvent): void {
+    this.events = this.events.map((iEvent) => {
+      if (iEvent === event) {
+        return {
+          ...event,
+          start: newStart,
+          end: newEnd,
+        };
+      }
+      return iEvent;
+    });
+    this.handleEvent('Dropped or resized', event);
+  }
+  handleEvent(action: string, event: CalendarEvent): void {
+    this.modalData = { event, action };
+    this.modal.open(this.modalContent, { size: 'lg' }); 
+  }
 
   validateEventTimesChanged = (
     { event, newStart, newEnd, allDay }: CalendarEventTimesChangedEvent,
@@ -131,16 +260,70 @@ export class BookingCalendarChildComponent {
     return true;
   };
 
-  eventTimesChanged (
-    eventTimesChangedEvent: CalendarEventTimesChangedEvent
-  ): void {
-    delete eventTimesChangedEvent.event.cssClass;
-    if (this.validateEventTimesChanged(eventTimesChangedEvent, false)) {
-      const { event, newStart, newEnd } = eventTimesChangedEvent;
-      event.start = newStart;
-      event.end = newEnd;
-      this.refresh.next();
-    }
+/*   addEvent(event:any): void {
+    this.events = [
+      ...this.events,
+      {
+        title: event,
+        start: startOfDay(new Date()),
+        end: endOfDay(new Date()),
+        color: colors.red,
+        draggable: true,
+        resizable: {
+          beforeStart: true,
+          afterEnd: true,
+        },
+      },
+    ];
+    this.updateBooking.emit(this.events);
+  } */
+
+  deleteEvent(eventToDelete: CalendarEvent) {
+    this.events = this.events.filter((event) => event !== eventToDelete);
   }
+
+  setView(view: CalendarView) {
+    this.view = view;
+  }
+
+  closeOpenMonthViewDay() {
+    this.activeDayIsOpen = false;
+  }
+
+  onSubmit():void {
+    let resourceColor: any
+   
+    if (this.resourceToBook.value.split("#")[1] === 'room') {
+
+      resourceColor = "colors."+ this.resourceToBook.value.split("#")[0]
+      //alert (`vas a reservar la sala ${resource.split("#")[0]}, hay que cambiar el tipo de datepicker`)
+
+    } else if (this.resourceToBook.value === 'pavillion') {
+      //alert (`vas a reservar el pavellón ${resource.split("#")[0]}`)
+    }
+    console.log (this.resourceToBook.value, this.resourceToBook.value.split("#")[1], this.resourceToBook.value.split("#")[0], resourceColor)
+    this.events = [
+      ...this.events,
+      {
+        title: this.resourceToBook.value+"...PENDING",
+        start: startOfDay(this.fromDate.value),
+        end: endOfDay(this.toDate.value),
+        color: colors.grey,
+        draggable: this.isDragable,
+        resizable: {
+          beforeStart: this.isDragable,
+          afterEnd: this.isafterEnd,
+        },
+      },
+    ];
+  }
+
+  weekEndFilter: (date: Date | null) => boolean =
+  (date: Date | null) => {
+    const day = date?.getDay();
+    return day !== 0 && day !== 6;
+    //0 means sunday
+    //6 means saturday
+}
 }
 
