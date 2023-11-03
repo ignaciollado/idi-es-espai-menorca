@@ -49,7 +49,7 @@ export class BookingCalendarChildComponent {
   public hideTime = false;
   public color: ThemePalette = 'primary';
 
-  view: CalendarView = CalendarView.Month
+  view: CalendarView = CalendarView.Week
 
   isDragable: boolean = false
   isbeforeStart: boolean = false
@@ -62,6 +62,8 @@ export class BookingCalendarChildComponent {
     event: CalendarEvent;
   }
   
+  events: CalendarEvent[] = []
+
   actions: CalendarEventAction[] = [
     {
       label: '<i class="fas fa-fw fa-pencil-alt"></i>',
@@ -80,7 +82,7 @@ export class BookingCalendarChildComponent {
     },
   ];
   
-  events: CalendarEvent[] = [
+/*   events: CalendarEvent[] = [
     {
       start: subDays(startOfDay(new Date()), 1),
       end: addDays(new Date(), 1),
@@ -149,7 +151,7 @@ export class BookingCalendarChildComponent {
       },
       draggable: this.isDragable,
     },
-  ];
+  ]; */
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -207,7 +209,7 @@ export class BookingCalendarChildComponent {
   private loadBookingList() {
     let eventItem: CalendarEvent
     let myColor: any
-    this.events = []
+    /* this.events = [] */
     let errorResponse: any
     
     this.bookingService.getAllBookings()
@@ -277,11 +279,9 @@ export class BookingCalendarChildComponent {
   refresh = new Subject<void>();
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    alert ("day clicked")
     if (isSameMonth(date, this.viewDate)) {
-      if (
-        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-        events.length === 0
-      ) {
+      if ( (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||  events.length === 0 ) {
         this.activeDayIsOpen = false;
       } else {
         this.activeDayIsOpen = true;
