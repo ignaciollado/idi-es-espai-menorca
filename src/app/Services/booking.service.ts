@@ -31,7 +31,7 @@ export class BookingService {
       private sharedService: SharedService
             ) { }
 
-  getAllBookings(companyId:any, aspectId?: number): Observable<BookingDTO[]> {
+  getAllBookings(): Observable<BookingDTO[]> {
     return this.http
       .get<BookingDTO[]>(`${URL_API}bookingGetAll.php`, httpOptions)
   }

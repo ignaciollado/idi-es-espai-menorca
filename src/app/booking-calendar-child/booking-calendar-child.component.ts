@@ -35,6 +35,7 @@ export class BookingCalendarChildComponent {
   bookingForm: UntypedFormGroup
   modal: any;
   theBooking: BookingDTO
+  bookings: BookingDTO[] = []
 
   public disabled = false;
   public showSpinners = true;
@@ -103,6 +104,20 @@ export class BookingCalendarChildComponent {
 
   private loadBookingList() {
      this.events = []
+     let errorResponse: any;
+    
+    this.bookingService.getAllBookings().subscribe(
+         (bookings: BookingDTO[]) => {
+           this.bookings = bookings
+           console.log (this.bookings)
+         },
+         (error: HttpErrorResponse) => {
+           errorResponse = error.error;
+           this.sharedService.errorLog(errorResponse)
+         }
+       );
+ 
+
   }
 
   public resourceSelected( resource: string ) {
