@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation, Inject, Template
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { FormControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Subject, finalize } from 'rxjs';
-import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
+import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarUtils, CalendarView } from 'angular-calendar';
 import { colors } from '../utils/colors';
 import { addDays, addHours, endOfDay, isSameDay, isSameMonth, setDay, startOfDay, subDays, subSeconds, } from 'date-fns';
 import { ThemePalette } from '@angular/material/core';
@@ -48,87 +48,6 @@ export class BookingCalendarChildComponent {
   public disableMinute = false;
   public hideTime = false;
   public color: ThemePalette = 'primary';
-
-  constructor(
-    private formBuilder: UntypedFormBuilder,
-    private bookingService: BookingService,
-    private sharedService: SharedService,
-    private _adapter: DateAdapter<any>,
-    @Inject(MAT_DATE_LOCALE) private _locale: string,
-
-    ) {
-
-    this._locale = 'ca-ES'; /* 'es-ES' */
-    this._adapter.setLocale(this._locale)
-    this.theBooking = new BookingDTO(this._adapter.today(), this._adapter.today(), 0, '', '', '', false, 'pending');
-    const currentYear = new Date().getFullYear()
-    const currentMonth = new Date().getMonth()
-    const currentDay = new Date().getDate()
-
-    this.minDate = new Date(currentYear, currentMonth, currentDay)
-    this.minDateTo = this.minDate 
-    this.maxDate = new Date(currentYear + 1, 11, 31)
-
-    this.fromDate = new FormControl<Date | null>(null, [ Validators.required ])
-    this.toDate = new FormControl<Date | null>(null, [ Validators.required])
-    this.resourceToBook = new UntypedFormControl('', [ Validators.required ])
-    this.bookerName = new UntypedFormControl('', [ Validators.required, Validators.minLength(3), Validators.maxLength(60) ])
-    this.idCard = new UntypedFormControl('', [Validators.required, Validators.minLength(9), Validators.maxLength(9)])
-    this.bookerEMail = new UntypedFormControl('', [ Validators.required, Validators.email ])
-
-    this.bookingForm = this.formBuilder.group ({
-      bookerName: this.bookerName,
-      bookerEMail: this.bookerEMail,
-      resourceToBook: this.resourceToBook,
-      idCard: this.idCard,
-      fromDate: this.fromDate,
-      toDate: this.toDate,
-    })
-
-    this.bookingForm.valueChanges.subscribe((e) => {
-      console.log (e)
-    
-      const currentYearTo = new Date(e.fromDate).getFullYear()
-      const currentMonthTo = new Date(e.fromDate).getMonth()
-      const currentDayTo = new Date(e.fromDate).getDate()
-  
-      this.minDateTo = new Date(currentYearTo, currentMonthTo, currentDayTo)
-      this.resourceSelected(e.resourceToBook);
-    });
-
-  }
-
-  ngOnInit() {
-    this.loadBookingList()
-  }
-
-  private loadBookingList() {
-     this.events = []
-     let errorResponse: any;
-    
-    this.bookingService.getAllBookings().subscribe(
-         (bookings: BookingDTO[]) => {
-           this.bookings = bookings
-           console.log (this.bookings)
-         },
-         (error: HttpErrorResponse) => {
-           errorResponse = error.error;
-           this.sharedService.errorLog(errorResponse)
-         }
-       );
- 
-
-  }
-
-  public resourceSelected( resource: string ) {
-
-    if (resource.split("#")[1] === 'room') {
-      //alert (`vas a reservar la sala ${resource.split("#")[0]}, hay que cambiar el tipo de datepicker`)
-    } else if (resource.split("#")[1] === 'pavillion') {
-      //alert (`vas a reservar el pavellón ${resource.split("#")[0]}`)
-    }
-    
-  }
 
   view: CalendarView = CalendarView.Month
 
@@ -231,6 +150,125 @@ export class BookingCalendarChildComponent {
       draggable: this.isDragable,
     },
   ];
+
+  constructor(
+    private formBuilder: UntypedFormBuilder,
+    private bookingService: BookingService,
+    private sharedService: SharedService,
+    private _adapter: DateAdapter<any>,
+    @Inject(MAT_DATE_LOCALE) private _locale: string,
+
+    ) {
+
+    this._locale = 'ca-ES'; /* 'es-ES' */
+    this._adapter.setLocale(this._locale)
+    this.theBooking = new BookingDTO(this._adapter.today(), this._adapter.today(), 0, '', '', '', false, 'pending');
+    const currentYear = new Date().getFullYear()
+    const currentMonth = new Date().getMonth()
+    const currentDay = new Date().getDate()
+
+    this.minDate = new Date(currentYear, currentMonth, currentDay)
+    this.minDateTo = this.minDate 
+    this.maxDate = new Date(currentYear + 1, 11, 31)
+
+    this.fromDate = new FormControl<Date | null>(null, [ Validators.required ])
+    this.toDate = new FormControl<Date | null>(null, [ Validators.required])
+    this.resourceToBook = new UntypedFormControl('', [ Validators.required ])
+    this.bookerName = new UntypedFormControl('', [ Validators.required, Validators.minLength(3), Validators.maxLength(60) ])
+    this.idCard = new UntypedFormControl('', [Validators.required, Validators.minLength(9), Validators.maxLength(9)])
+    this.bookerEMail = new UntypedFormControl('', [ Validators.required, Validators.email ])
+
+    this.bookingForm = this.formBuilder.group ({
+      bookerName: this.bookerName,
+      bookerEMail: this.bookerEMail,
+      resourceToBook: this.resourceToBook,
+      idCard: this.idCard,
+      fromDate: this.fromDate,
+      toDate: this.toDate,
+    })
+
+    this.bookingForm.valueChanges.subscribe((e) => {
+      console.log (e)
+    
+      const currentYearTo = new Date(e.fromDate).getFullYear()
+      const currentMonthTo = new Date(e.fromDate).getMonth()
+      const currentDayTo = new Date(e.fromDate).getDate()
+  
+      this.minDateTo = new Date(currentYearTo, currentMonthTo, currentDayTo)
+      this.resourceSelected(e.resourceToBook);
+    });
+
+  }
+
+  ngOnInit() {
+    this.loadBookingList()
+  }
+
+  private loadBookingList() {
+    let eventItem: CalendarEvent
+    let myColor: any
+    this.events = []
+    let errorResponse: any
+    
+    this.bookingService.getAllBookings()
+    .pipe( )
+    
+    .subscribe(
+         (bookings: BookingDTO[]) => {
+           this.bookings = bookings
+           this.bookings.map( (event: any) => {
+            console.log (event.resourceBooked.split("#")[0])
+            switch(event.resourceBooked.split("#")[0]) {
+              case 'red':
+                myColor = colors.red
+                break
+              case 'blue':
+                myColor = colors.blue
+                break
+              case 'white':
+                myColor = colors.white
+                break
+              case 'yellow':
+                myColor = colors.blue
+                break
+              case 'A':
+                myColor = colors.pavellonA
+                break
+              case 'B':
+                myColor = colors.pavellonB
+                break
+            }
+            eventItem = {
+              start: subDays(startOfDay(new Date( event.fromDate)), 1),
+              end: addDays(new Date(event.toDate), 1),
+              title: event.resourceBooked,
+              color: myColor,
+              allDay: event.allDay,
+              resizable: {
+                beforeStart: this.isbeforeStart,
+                afterEnd: this.isafterEnd,
+              },
+              draggable: this.isDragable,
+         }
+          this.events.push(eventItem)
+          })
+         },
+         (error: HttpErrorResponse) => {
+           errorResponse = error.error;
+           this.sharedService.errorLog(errorResponse)
+         }
+       );
+  }
+
+  public resourceSelected( resource: string ) {
+
+    if (resource.split("#")[1] === 'room') {
+      //alert (`vas a reservar la sala ${resource.split("#")[0]}, hay que cambiar el tipo de datepicker`)
+    } else if (resource.split("#")[1] === 'pavillion') {
+      //alert (`vas a reservar el pavellón ${resource.split("#")[0]}`)
+    }
+    
+  }
 
   /* events: CalendarEvent[] = [] */
 
