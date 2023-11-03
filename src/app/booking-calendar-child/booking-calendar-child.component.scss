@@ -1,5 +1,12 @@
-.child{
-    border: 2px solid #0d6efd;
-    padding: 0.5rem;
+.child {
     border-radius: .5rem;
+    margin: auto;
+    width: 100%;
+    border: 3px solid green;
+    padding: 1rem;
+    text-align: center;
+}
+
+.button-row {
+    text-align: right;
 }

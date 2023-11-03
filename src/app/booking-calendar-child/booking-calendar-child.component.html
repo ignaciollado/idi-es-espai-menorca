@@ -1,8 +1,6 @@
 
 <div class="container child">
 
-  
- <!--    ***{{bookingData | json}}*** -->
   <form 
     [formGroup]="bookingForm" 
     (ngSubmit)="onSubmit()"
@@ -10,10 +8,16 @@
 
     <section>
       <mat-form-field appearance="fill" [style.width.px]=327>
-        <input matInput placeholder="Your name" [formControl]="bookerName">
+        <mat-label>Your name</mat-label>
+        <input matInput [formControl]="bookerName">
       </mat-form-field>
       <mat-form-field appearance="fill" [style.width.px]=327>
-        <input matInput placeholder="Your email address" [formControl]="bookerEMail">
+        <mat-label>Your ID card</mat-label>
+        <input matInput [formControl]="idCard" matTooltip="We need your ID card for the budget and/or the invoice">
+      </mat-form-field>
+      <mat-form-field appearance="fill" [style.width.px]=327>
+        <mat-label>An email address to contact you</mat-label>
+        <input matInput [formControl]="bookerEMail" matTooltip="We'll use this mail to conact you">
         <mat-error *ngIf="bookerEMail.hasError('email') && !bookerEMail.hasError('required')">
           Please enter a valid email address
         </mat-error>
@@ -32,32 +36,18 @@
           <mat-option value="B#pavillion">Pavellón B</mat-option>
         </mat-select>
       </mat-form-field>
-    </section>
-
-   <!--  <section>
-      <mat-form-field>
-        <input matInput [ngxMatDatetimePicker]="picker" placeholder="Choose a date" [formControl]="fromDate"
-          [min]="minDate" [max]="maxDate" [disabled]="disabled">
-        <ngx-mat-datepicker-toggle matSuffix [for]="picker"></ngx-mat-datepicker-toggle>
-        <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
-          [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
-          [color]="color" [enableMeridian]="enableMeridian" [disableMinute]="disableMinute" [hideTime]="hideTime">
-        </ngx-mat-datetime-picker>
-      </mat-form-field>
-    </section> -->
-
-    <section>
       <mat-form-field appearance="fill" [style.width.px]=327>
-        <input matInput [matDatepicker]="pickerFromDate" placeholder="From date" 
-                                  [formControl]="fromDate" 
-                                  [min]="minDate" 
-                                  [matDatepickerFilter]="weekEndFilter">
+        <mat-label>From date</mat-label>
+        <input matInput [matDatepicker]="pickerFromDate"                      [formControl]="fromDate" 
+                                                                              [min]="minDate" 
+                                                                              [matDatepickerFilter]="weekEndFilter">
         <mat-datepicker-toggle matSuffix [for]="pickerFromDate"></mat-datepicker-toggle>
         <mat-datepicker #pickerFromDate [startAt]="minDate"></mat-datepicker>
       </mat-form-field>
 
       <mat-form-field appearance="fill" [style.width.px]=327>
-        <input matInput [matDatepicker]="pickerToDate" placeholder="To date" [formControl]="toDate" 
+        <mat-label>To date</mat-label>
+        <input matInput [matDatepicker]="pickerToDate"                        [formControl]="toDate" 
                                                                               [min]="minDateTo" 
                                                                               [matDatepickerFilter]="weekEndFilter">
         <mat-datepicker-toggle matSuffix [for]="pickerToDate"></mat-datepicker-toggle>
@@ -66,8 +56,9 @@
     </section>
 
     <section class="button-row">
-      <button mat-raised-button color="primary" type="submit"  [disabled]="!bookingForm.valid">Send</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!bookingForm.valid" matTooltip="Send us your booking proposal">Send</button>
     </section>
+    ***{{bookingForm.value | json}}*** 
   </form>
 
     <mwl-utils-calendar-header [(view)]="view" [(viewDate)]="viewDate"></mwl-utils-calendar-header>
@@ -80,8 +71,7 @@
         [activeDayIsOpen]="activeDayIsOpen"
         (dayClicked)="dayClicked($event.day)"
         (eventClicked)="handleEvent('Clicked', $event.event)"
-        (eventTimesChanged)="eventTimesChanged($event)"
-      >
+        (eventTimesChanged)="eventTimesChanged($event)">
       </mwl-calendar-month-view>
 
       <mwl-calendar-week-view
@@ -90,8 +80,7 @@
         [events]="events"
         [refresh]="refresh"
         (eventClicked)="handleEvent('Clicked', $event.event)"
-        (eventTimesChanged)="eventTimesChanged($event)"
-      >
+        (eventTimesChanged)="eventTimesChanged($event)">
       </mwl-calendar-week-view>
 
       <mwl-calendar-day-view
@@ -100,8 +89,7 @@
         [events]="events"
         [refresh]="refresh"
         (eventClicked)="handleEvent('Clicked', $event.event)"
-        (eventTimesChanged)="eventTimesChanged($event)"
-      >
+        (eventTimesChanged)="eventTimesChanged($event)">
       </mwl-calendar-day-view>
     </div>
 

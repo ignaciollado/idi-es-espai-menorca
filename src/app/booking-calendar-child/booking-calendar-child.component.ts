@@ -1,11 +1,15 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation, Inject, TemplateRef, EventEmitter, ViewChild } from '@angular/core';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { FormControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, finalize } from 'rxjs';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
 import { colors } from '../utils/colors';
 import { addDays, addHours, endOfDay, isSameDay, isSameMonth, setDay, startOfDay, subDays, subSeconds, } from 'date-fns';
 import { ThemePalette } from '@angular/material/core';
+import { BookingDTO } from '../Models/booking.model';
+import { BookingService } from '../Services/booking.service';
+import { SharedService } from '../Services/shared.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-booking-calendar-child',
@@ -26,9 +30,11 @@ export class BookingCalendarChildComponent {
   toDate: FormControl
   resourceToBook: UntypedFormControl
   bookerName: UntypedFormControl
+  idCard: UntypedFormControl
   bookerEMail: UntypedFormControl
   bookingForm: UntypedFormGroup
   modal: any;
+  theBooking: BookingDTO
 
   public disabled = false;
   public showSpinners = true;
@@ -44,6 +50,8 @@ export class BookingCalendarChildComponent {
 
   constructor(
     private formBuilder: UntypedFormBuilder,
+    private bookingService: BookingService,
+    private sharedService: SharedService,
     private _adapter: DateAdapter<any>,
     @Inject(MAT_DATE_LOCALE) private _locale: string,
 
@@ -51,7 +59,7 @@ export class BookingCalendarChildComponent {
 
     this._locale = 'ca-ES'; /* 'es-ES' */
     this._adapter.setLocale(this._locale)
-
+    this.theBooking = new BookingDTO(this._adapter.today(), this._adapter.today(), 0, '', '', '', false, 'pending');
     const currentYear = new Date().getFullYear()
     const currentMonth = new Date().getMonth()
     const currentDay = new Date().getDate()
@@ -64,12 +72,14 @@ export class BookingCalendarChildComponent {
     this.toDate = new FormControl<Date | null>(null, [ Validators.required])
     this.resourceToBook = new UntypedFormControl('', [ Validators.required ])
     this.bookerName = new UntypedFormControl('', [ Validators.required, Validators.minLength(3), Validators.maxLength(60) ])
+    this.idCard = new UntypedFormControl('', [Validators.required, Validators.minLength(9), Validators.maxLength(9)])
     this.bookerEMail = new UntypedFormControl('', [ Validators.required, Validators.email ])
 
     this.bookingForm = this.formBuilder.group ({
       bookerName: this.bookerName,
       bookerEMail: this.bookerEMail,
       resourceToBook: this.resourceToBook,
+      idCard: this.idCard,
       fromDate: this.fromDate,
       toDate: this.toDate,
     })
@@ -226,6 +236,7 @@ export class BookingCalendarChildComponent {
       this.viewDate = date;
     }
   }
+
   eventTimesChanged({
     event,
     newStart,
@@ -243,6 +254,7 @@ export class BookingCalendarChildComponent {
     });
     this.handleEvent('Dropped or resized', event);
   }
+
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
     this.modal.open(this.modalContent, { size: 'lg' }); 
@@ -341,6 +353,39 @@ export class BookingCalendarChildComponent {
         },
       },
     ];
+
+    let errorResponse: any
+    let responseOK: boolean = false
+    this.theBooking = this.bookingForm.value
+    this.bookingService.createBooking(this.theBooking)
+        .pipe(
+          finalize(async () => {
+            await this.sharedService.managementToast(
+              'postFeedback',
+              responseOK,
+              errorResponse
+            );
+          })
+        )
+        .subscribe(
+          () => {
+            responseOK = true;
+            this.resourceToBook.reset()
+            this.fromDate.reset()
+            this.toDate.reset()
+            this.bookerName.reset()
+            this.bookerEMail.reset()
+            this.idCard.reset()
+
+            this.loadBookingList()
+          },
+          (error: HttpErrorResponse) => {
+            errorResponse = error.error;
+            this.sharedService.errorLog(errorResponse);
+          }
+        );
+
+
   }
 
   weekEndFilter: (date: Date | null) => boolean =
