@@ -34,6 +34,6 @@ This project uses Angular calendar
 
 This project uses Angular Material
 
-## What does this project?
+## What does this project do?
 
 
