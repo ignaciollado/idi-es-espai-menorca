@@ -28,4 +28,12 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Calendar
 
-This project uses angular calendar
+This project uses Angular calendar
+
+## Angular Material
+
+This project uses Angular Material
+
+## What does this project?
+
+
