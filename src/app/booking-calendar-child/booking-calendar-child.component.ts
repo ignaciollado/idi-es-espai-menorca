@@ -49,7 +49,7 @@ export class BookingCalendarChildComponent {
   public hideTime = false;
   public color: ThemePalette = 'primary';
 
-  view: CalendarView = CalendarView.Week
+  view: CalendarView = CalendarView.Month
 
   isDragable: boolean = false
   isbeforeStart: boolean = false
@@ -279,7 +279,6 @@ export class BookingCalendarChildComponent {
   refresh = new Subject<void>();
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    alert ("day clicked")
     if (isSameMonth(date, this.viewDate)) {
       if ( (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||  events.length === 0 ) {
         this.activeDayIsOpen = false;

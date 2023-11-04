@@ -1,31 +1,31 @@
 
-<div class="container child">
+<div class="form-container child">
 
   <form
     [formGroup]="bookingForm"
     (ngSubmit)="onSubmit()"
     *ngIf="bookingForm">
 
-    <section>
-      <mat-form-field appearance="fill" [style.width.px]=327>
+    <!-- <section> -->
+      <mat-form-field appearance="outline">
         <mat-label>Your name</mat-label>
         <input matInput [formControl]="bookerName">
       </mat-form-field>
-      <mat-form-field appearance="fill" [style.width.px]=327>
+      <mat-form-field appearance="outline">
         <mat-label>Your ID card</mat-label>
         <input matInput [formControl]="idCard" matTooltip="We need your ID card for the budget and/or the invoice">
       </mat-form-field>
-      <mat-form-field appearance="fill" [style.width.px]=327>
+      <mat-form-field appearance="outline">
         <mat-label>An email address to contact you</mat-label>
         <input matInput [formControl]="bookerEMail" matTooltip="We'll use this mail to conact you">
         <mat-error *ngIf="bookerEMail.hasError('email') && !bookerEMail.hasError('required')">
           Please enter a valid email address
         </mat-error>
       </mat-form-field>
-    </section>
+    <!-- </section> -->
 
-    <section>
-      <mat-form-field appearance="fill" [style.width.px]=327>
+    <!-- <section> -->
+      <mat-form-field appearance="outline">
         <mat-label>Please, select the resource to book</mat-label>
         <mat-select [formControl]="resourceToBook" #theResource (change)='resourceSelected(theResource.value)'>
           <mat-option value="white#room">Sala BLANCA</mat-option>
@@ -36,7 +36,7 @@
           <mat-option value="B#pavillion">Pavellón B</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field appearance="fill" [style.width.px]=327>
+      <mat-form-field appearance="outline">
         <mat-label>From date</mat-label>
         <input matInput [matDatepicker]="pickerFromDate"                      [formControl]="fromDate"
                                                                               [min]="minDate"
@@ -45,7 +45,7 @@
         <mat-datepicker #pickerFromDate [startAt]="minDate"></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field appearance="fill" [style.width.px]=327>
+      <mat-form-field appearance="outline">
         <mat-label>To date</mat-label>
         <input matInput [matDatepicker]="pickerToDate"                        [formControl]="toDate"
                                                                               [min]="minDateTo"
@@ -53,16 +53,16 @@
         <mat-datepicker-toggle matSuffix [for]="pickerToDate"></mat-datepicker-toggle>
         <mat-datepicker #pickerToDate [startAt]="minDateTo"></mat-datepicker>
       </mat-form-field>
-    </section>
+    <!-- </section> -->
 
-    <section class="button-row">
+    <section class="button-submit">
       <button mat-raised-button color="primary" type="submit" [disabled]="!bookingForm.valid" matTooltip="Send us your booking proposal">Send</button>
     </section>
     <!-- ***{{bookingForm.value | json}}***  -->
   </form>
 
-    <mwl-utils-calendar-header [(view)]="view" [(viewDate)]="viewDate"></mwl-utils-calendar-header>
-    <div [ngSwitch]="view">
+  <mwl-utils-calendar-header [(view)]="view" [(viewDate)]="viewDate"></mwl-utils-calendar-header>
+  <div [ngSwitch]="view">
       <mwl-calendar-month-view
         *ngSwitchCase="CalendarView.Month"
         [viewDate]="viewDate"
@@ -91,7 +91,7 @@
         (eventClicked)="handleEvent('Clicked', $event.event)"
         (eventTimesChanged)="eventTimesChanged($event)">
       </mwl-calendar-day-view>
-    </div>
+  </div>
 
 </div>
 

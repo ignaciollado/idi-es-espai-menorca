@@ -1,12 +1,37 @@
 .child {
     border-radius: .5rem;
-    margin: auto;
-    width: 100%;
+  /*   margin: auto;
+    width: 100%; */
     border: 3px solid green;
     padding: 1rem;
-    text-align: center;
+/*     text-align: center; */
 }
 
-.button-row {
+mat-form-field {
+  width: 100%;
+}
+
+.button-submit {
     text-align: right;
+}
+
+.cal-day-column {
+  margin: auto;
+  width: 60%;
+}
+
+.cal-event{
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  padding: 0 5px;
+  margin: auto;
+  width: 60%;
+  /* height: 28px; */
+  line-height: 28px;
+}
+
+.cal-event-title{
+  background-color: orangered!important;
+  padding: 0!important;
 }
