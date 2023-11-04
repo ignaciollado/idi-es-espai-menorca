@@ -1,7 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ViewEncapsulation, Input 
+  ViewEncapsulation, Input
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import {
@@ -110,7 +110,7 @@ export class AppComponent {
 
   refresh = new Subject<void>();
 
-  validateEventTimesChanged = (
+/*   validateEventTimesChanged = (
     { event, newStart, newEnd, allDay }: CalendarEventTimesChangedEvent,
     addCssClass = true
   ) => {
@@ -145,9 +145,9 @@ export class AppComponent {
     }
 
     return true;
-  };
+  }; */
 
-  eventTimesChanged(
+  /* eventTimesChanged(
     eventTimesChangedEvent: CalendarEventTimesChangedEvent
   ): void {
     delete eventTimesChangedEvent.event.cssClass;
@@ -157,5 +157,5 @@ export class AppComponent {
       event.end = newEnd;
       this.refresh.next();
     }
-  }
+  } */
 }

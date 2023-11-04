@@ -1,8 +1,8 @@
 
 <div class="container child">
 
-  <form 
-    [formGroup]="bookingForm" 
+  <form
+    [formGroup]="bookingForm"
     (ngSubmit)="onSubmit()"
     *ngIf="bookingForm">
 
@@ -38,8 +38,8 @@
       </mat-form-field>
       <mat-form-field appearance="fill" [style.width.px]=327>
         <mat-label>From date</mat-label>
-        <input matInput [matDatepicker]="pickerFromDate"                      [formControl]="fromDate" 
-                                                                              [min]="minDate" 
+        <input matInput [matDatepicker]="pickerFromDate"                      [formControl]="fromDate"
+                                                                              [min]="minDate"
                                                                               [matDatepickerFilter]="weekEndFilter">
         <mat-datepicker-toggle matSuffix [for]="pickerFromDate"></mat-datepicker-toggle>
         <mat-datepicker #pickerFromDate [startAt]="minDate"></mat-datepicker>
@@ -47,8 +47,8 @@
 
       <mat-form-field appearance="fill" [style.width.px]=327>
         <mat-label>To date</mat-label>
-        <input matInput [matDatepicker]="pickerToDate"                        [formControl]="toDate" 
-                                                                              [min]="minDateTo" 
+        <input matInput [matDatepicker]="pickerToDate"                        [formControl]="toDate"
+                                                                              [min]="minDateTo"
                                                                               [matDatepickerFilter]="weekEndFilter">
         <mat-datepicker-toggle matSuffix [for]="pickerToDate"></mat-datepicker-toggle>
         <mat-datepicker #pickerToDate [startAt]="minDateTo"></mat-datepicker>
@@ -94,5 +94,4 @@
     </div>
 
 </div>
-  
-  
+

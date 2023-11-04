@@ -61,8 +61,8 @@ export class BookingCalendarChildComponent {
     action: string;
     event: CalendarEvent;
   }
-  
-  events: CalendarEvent[] = []
+
+  /* events: CalendarEvent[] = [] */
 
   actions: CalendarEventAction[] = [
     {
@@ -81,8 +81,8 @@ export class BookingCalendarChildComponent {
       },
     },
   ];
-  
-/*   events: CalendarEvent[] = [
+
+   events: CalendarEvent[] = [
     {
       start: subDays(startOfDay(new Date()), 1),
       end: addDays(new Date(), 1),
@@ -151,7 +151,7 @@ export class BookingCalendarChildComponent {
       },
       draggable: this.isDragable,
     },
-  ]; */
+  ];
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -170,7 +170,7 @@ export class BookingCalendarChildComponent {
     const currentDay = new Date().getDate()
 
     this.minDate = new Date(currentYear, currentMonth, currentDay)
-    this.minDateTo = this.minDate 
+    this.minDateTo = this.minDate
     this.maxDate = new Date(currentYear + 1, 11, 31)
 
     this.fromDate = new FormControl<Date | null>(null, [ Validators.required ])
@@ -191,11 +191,11 @@ export class BookingCalendarChildComponent {
 
     this.bookingForm.valueChanges.subscribe((e) => {
       console.log (e)
-    
+
       const currentYearTo = new Date(e.fromDate).getFullYear()
       const currentMonthTo = new Date(e.fromDate).getMonth()
       const currentDayTo = new Date(e.fromDate).getDate()
-  
+
       this.minDateTo = new Date(currentYearTo, currentMonthTo, currentDayTo)
       this.resourceSelected(e.resourceToBook);
     });
@@ -211,10 +211,10 @@ export class BookingCalendarChildComponent {
     let myColor: any
     /* this.events = [] */
     let errorResponse: any
-    
+
     this.bookingService.getAllBookings()
     .pipe( )
-    
+
     .subscribe(
          (bookings: BookingDTO[]) => {
            this.bookings = bookings
@@ -269,7 +269,7 @@ export class BookingCalendarChildComponent {
     } else if (resource.split("#")[1] === 'pavillion') {
       //alert (`vas a reservar el pavellón ${resource.split("#")[0]}`)
     }
-    
+
   }
 
   /* events: CalendarEvent[] = [] */
@@ -310,10 +310,10 @@ export class BookingCalendarChildComponent {
 
   handleEvent(action: string, event: CalendarEvent): void {
     this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' }); 
+    this.modal.open(this.modalContent, { size: 'lg' });
   }
 
-  validateEventTimesChanged = (
+/*   validateEventTimesChanged = (
     { event, newStart, newEnd, allDay }: CalendarEventTimesChangedEvent,
     addCssClass = true
   ) => {
@@ -348,7 +348,7 @@ export class BookingCalendarChildComponent {
     }
 
     return true;
-  };
+  }; */
 
 /*   addEvent(event:any): void {
     this.events = [
@@ -379,10 +379,9 @@ export class BookingCalendarChildComponent {
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
   }
-
   onSubmit():void {
     let resourceColor: any
-   
+
     if (this.resourceToBook.value.split("#")[1] === 'room') {
 
       resourceColor = "colors."+ this.resourceToBook.value.split("#")[0]
