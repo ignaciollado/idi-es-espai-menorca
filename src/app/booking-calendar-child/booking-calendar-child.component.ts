@@ -15,8 +15,8 @@ import { HttpErrorResponse } from '@angular/common/http';
   selector: 'app-booking-calendar-child',
   templateUrl: './booking-calendar-child.component.html',
   styleUrls: ['./booking-calendar-child.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
+/*   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None, */
 })
 
 export class BookingCalendarChildComponent {
@@ -219,7 +219,6 @@ export class BookingCalendarChildComponent {
          (bookings: BookingDTO[]) => {
            this.bookings = bookings
            this.bookings.map( (event: any) => {
-            console.log (event.resourceBooked.split("#")[0])
             switch(event.resourceBooked.split("#")[0]) {
               case 'red':
                 myColor = colors.red
@@ -231,7 +230,7 @@ export class BookingCalendarChildComponent {
                 myColor = colors.white
                 break
               case 'yellow':
-                myColor = colors.blue
+                myColor = colors.yellow
                 break
               case 'A':
                 myColor = colors.pavellonA
@@ -241,11 +240,14 @@ export class BookingCalendarChildComponent {
                 break
             }
             eventItem = {
-              start: subDays(startOfDay(new Date( event.fromDate)), 1),
-              end: addDays(new Date(event.toDate), 1),
+              /* start: subDays(startOfDay(new Date( event.fromDate)), 1), */
+              start: new Date(event.fromDate),
+              end: new Date(event.toDate),
+              /* end: addDays(new Date(event.toDate), 1), */
               title: event.resourceBooked,
               color: myColor,
               allDay: event.allDay,
+              cssClass: 'my-custom-class',
               resizable: {
                 beforeStart: this.isbeforeStart,
                 afterEnd: this.isafterEnd,

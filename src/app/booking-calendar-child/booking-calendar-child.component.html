@@ -13,7 +13,7 @@
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Your ID card</mat-label>
-        <input matInput [formControl]="idCard" matTooltip="We need your ID card for the budget and/or the invoice">
+        <input matInput [formControl]="idCard" matTooltip="We need your ID card for the budget and/or the invoice" maxlength="9" minlength="9">
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>An email address to contact you</mat-label>
@@ -88,6 +88,9 @@
         [viewDate]="viewDate"
         [events]="events"
         [refresh]="refresh"
+        [dayStartHour]="8"
+        [dayEndHour]="18"
+        [hourSegments]="1"
         (eventClicked)="handleEvent('Clicked', $event.event)"
         (eventTimesChanged)="eventTimesChanged($event)">
       </mwl-calendar-day-view>
