@@ -1,17 +1,28 @@
+.form-container-child {
+  display: grid;
+  grid-template-columns: 30% 70%;
+  grid-template-areas: "bookingForm bookingCalendar";
+  border-radius: .5rem;
+  border: 3px solid green;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+form {
+  padding-top: 1rem;
+  grid-area: bookingForm;
+}
+
+.theCalendar {
+  grid-area: bookingCalendar;
+}
+
 .my-custom-class {
   background-color: greenyellow;
   color: red;
   font-weight: 900;
   text-align: center;
   padding: 1rem;
-}
-.child {
-    border-radius: .5rem;
-  /*   margin: auto;
-    width: 100%; */
-    border: 3px solid green;
-    padding: 1rem;
-/*     text-align: center; */
 }
 
 mat-form-field {
@@ -41,4 +52,12 @@ mat-form-field {
 .cal-event-title{
   background-color: orangered!important;
   padding: 0!important;
+}
+
+@media (max-width: 795px) {
+
+  .form-container-child {
+    grid-template-areas: "bookingForm" "bookingCalendar";
+  }
+
 }

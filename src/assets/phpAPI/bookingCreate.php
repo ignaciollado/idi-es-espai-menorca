@@ -34,7 +34,7 @@ $result = mysqli_query($conn, $sql);
 mysqli_close($conn);
 if ($result) {
   header('Content-Type: application/json');
-  echo  http_response_code(200);
+  echo  (http_response_code(200));
 } else  {
   echo http_response_code(401);
 }
