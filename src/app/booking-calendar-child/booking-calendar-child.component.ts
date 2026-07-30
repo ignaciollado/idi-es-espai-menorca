@@ -2,9 +2,7 @@ import { booleanAttribute, Component, ViewEncapsulation } from '@angular/core';
 import { DateAdapter } from '@angular/material/core';
 import { FormGroup, FormControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { CalendarEvent, CalendarEventAction, 
-  CalendarEventTimesChangedEvent, CalendarMonthViewBeforeRenderEvent, 
-  CalendarView, CalendarWeekViewBeforeRenderEvent, DAYS_OF_WEEK } from 'angular-calendar';
+import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarMonthViewBeforeRenderEvent, CalendarView, CalendarWeekViewBeforeRenderEvent, DAYS_OF_WEEK } from 'angular-calendar';
 import { colors } from '../utils/colors';
 import { addDays, isSameDay, isSameMonth, startOfDay, subDays } from 'date-fns';
 import { ThemePalette } from '@angular/material/core';
@@ -463,7 +461,7 @@ export class BookingCalendarChildComponent {
     this.activeDayIsOpen = false;
   }
 
-  onSubmit():void {
+/*   onSubmit():void {
     let resourceColor: any
     let errorResponse: any
     let responseOK: boolean = false
@@ -471,23 +469,65 @@ export class BookingCalendarChildComponent {
 
     this.bookingService.sendPostRequest(this.bookingForm.value)
     .subscribe((insertResponse: any) => {
+    console.log('Reserva creada:', insertResponse); // <-- aquí tienes la respuesta
+    
      if (insertResponse.status === 'failure') {
       responseOK = false
+      this.sharedService.managementToast('postFeedback', responseOK, insertResponse, 'booking')
      } else {
       responseOK = true
+      console.log("Reserva ok", insertResponse)
       locator = insertResponse.locator
       this.sharedService.managementToast('postFeedback', responseOK, insertResponse, 'booking')
       this.emailManagementService.sendCustomerEmail(this.bookingForm, locator)
       .subscribe((emailsent:any) => {
         console.log ("email enviado: ", emailsent)
-       /*  this.bookingForm.reset() */
       })
      }
-     /* this.sharedService.managementToast('postFeedback', responseOK, insertResponse, 'booking') */
+
     }, error => { 
       responseOK = false
       this.sharedService.managementToast('postFeedback', responseOK, error.message)
       })
+  } */
+
+  onSubmit(): void {
+
+    this.bookingService.sendPostRequest(this.bookingForm.value)
+      .subscribe({
+        next: (insertResponse: any) => {
+
+          if (insertResponse?.status === 'failure') {
+
+            this.snackBar.open(
+              insertResponse.message,
+              'Cerrar',
+              { duration: 12000 }
+            );
+
+            return;
+          }
+
+          this.snackBar.open(
+            'Reserva realizada correctamente',
+            'Cerrar',
+            { duration: 5000 }
+          );
+
+          this.emailManagementService
+            .sendCustomerEmail(this.bookingForm, '')
+            .subscribe();
+        },
+
+        error: (error) => {
+
+          this.snackBar.open(
+            'Error al realizar la reserva',
+            'Cerrar',
+            { duration: 5000 }
+          );
+        }
+      });
   }
 
   weekEndFilter: (date: Date | null) => boolean =
@@ -557,7 +597,8 @@ export class BookingCalendarChildComponent {
 
   rateChangedAction(hours: number) {
     let responseOK: boolean = false
-    this.bookingService.getCheckAvailabilityADRBalears(this.bki_id.value, this.bookingForm.get('boo_start').value, this.bookingForm.get('boo_end').value)
+    this.bookingService.getCheckAvailabilityADRBalears(
+      this.bki_id.value, this.bookingForm.get('boo_start').value, this.bookingForm.get('boo_end').value)
     .subscribe((avalibility:any) => {
       if (avalibility.status === 'failure') {
        responseOK = false

@@ -140,8 +140,9 @@ export class BookingService {
       minutosEnd = minutosEnd+"0"
     }
 
-    /*     start = boo_start.getFullYear()+"-"+(boo_start.toLocaleString("es-ES", { month: "2-digit" }))+"-"+boo_start.toLocaleString("es-ES", { day: "2-digit" })+" "+boo_start.toLocaleString("es-ES", { hour: "2-digit" })+":"+minutosStart
-      end   = boo_end.getFullYear()+"-"+(boo_end.toLocaleString("es-ES", { month: "2-digit" }))+"-"+boo_end.toLocaleString("es-ES", { day: "2-digit" })+" "+boo_end.toLocaleString("es-ES", { hour: "2-digit" })+":"+minutosEnd
+    /*     
+    start = boo_start.getFullYear()+"-"+(boo_start.toLocaleString("es-ES", { month: "2-digit" }))+"-"+boo_start.toLocaleString("es-ES", { day: "2-digit" })+" "+boo_start.toLocaleString("es-ES", { hour: "2-digit" })+":"+minutosStart
+    end   = boo_end.getFullYear()+"-"+(boo_end.toLocaleString("es-ES", { month: "2-digit" }))+"-"+boo_end.toLocaleString("es-ES", { day: "2-digit" })+" "+boo_end.toLocaleString("es-ES", { hour: "2-digit" })+":"+minutosEnd
     */
 
     if (bki_id !== '7') {
@@ -153,8 +154,7 @@ export class BookingService {
     }
     console.log (`checking availability for: ${start} - ${end}`)
 
-    return this.http
-      .get<BookingADRBalearsDTO>(`${URL_BACKOFFICE}/booking/-1/checkavailability?bki_id=${bki_id}&pro_id=${pro_id}&boo_start=${start}&boo_end=${end}`, httpOptionsADRBalears)
+    return this.http.get<BookingADRBalearsDTO>(`${URL_BACKOFFICE}/booking/-1/checkavailability?bki_id=${bki_id}&pro_id=${pro_id}&boo_start=${start}&boo_end=${end}`, httpOptionsADRBalears)
   }
 
   sendPostRequest(formData: any): Observable<BookingADRBalearsDTO> {
@@ -196,8 +196,7 @@ export class BookingService {
     }
     console.log ("enviado a backoffice: ", dataToADRBalears)
     const headers = new HttpHeaders({'Authorization': `Bearer ${token_bearer}`, 'Content-Type': 'application/json; charset=utf-8'})
-    return this.http
-      .post<BookingADRBalearsDTO>(`${URL_BACKOFFICE}/booking`, dataToADRBalears, { headers })
+    return this.http.post<BookingADRBalearsDTO>(`${URL_BACKOFFICE}/booking`, dataToADRBalears, { headers })
   }
 
 }
