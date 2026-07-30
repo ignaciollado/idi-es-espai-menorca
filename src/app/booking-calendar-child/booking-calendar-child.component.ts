@@ -492,26 +492,22 @@ export class BookingCalendarChildComponent {
   } */
 
   onSubmit(): void {
-
     this.bookingService.sendPostRequest(this.bookingForm.value)
       .subscribe({
         next: (insertResponse: any) => {
-
           if (insertResponse?.status === 'failure') {
-
             this.snackBar.open(
               insertResponse.message,
               'Cerrar',
               { duration: 12000 }
             );
-
             return;
           }
 
           this.snackBar.open(
             'Reserva realizada correctamente',
             'Cerrar',
-            { duration: 5000 }
+            { duration: 12000 }
           );
 
           this.emailManagementService
@@ -524,7 +520,7 @@ export class BookingCalendarChildComponent {
           this.snackBar.open(
             'Error al realizar la reserva',
             'Cerrar',
-            { duration: 5000 }
+            { duration: 12000 }
           );
         }
       });
@@ -543,20 +539,20 @@ export class BookingCalendarChildComponent {
   bookingDates: Date[] = []
 
   onResourceChange(resourceItem:any) {
-   const control = this.bookingForm.get("fromDateFromTime")
-   console.log (resourceItem)
-   this.isFeedBackVisible = false
-   if (resourceItem.value !== '7') {
-     this.showTime = true
-     this.isTarifaVisible = true
-     control.setValidators(Validators.required)
-   } else if (resourceItem.value === '7') {
-     this.showTime = false
-     this.isTarifaVisible = false
-     control.clearValidators()
-     control.reset()
-   }
-   control.updateValueAndValidity()
+    const control = this.bookingForm.get("fromDateFromTime")
+    console.log (resourceItem)
+    this.isFeedBackVisible = false
+    if (resourceItem.value !== '7') {
+      this.showTime = true
+      this.isTarifaVisible = true
+      control.setValidators(Validators.required)
+    } else if (resourceItem.value === '7') {
+      this.showTime = false
+      this.isTarifaVisible = false
+      control.clearValidators()
+      control.reset()
+    }
+    control.updateValueAndValidity()
   }
 
   /* addDateFrom(newDate: string) {const date = new Date(newDate); date.setHours(0, 0, 0, 0); this.bookingDatesFrom.push(date)}
@@ -584,7 +580,7 @@ export class BookingCalendarChildComponent {
         } else {
           responseOK = true
         }
-        this.showSnackBar ("AVAILABILITY ...")
+        //this.showSnackBar ("AVAILABILITY ...")
         this.isFeedBackVisible = true
         this.sharedService.managementToast('postFeedback', responseOK, avalibility, 'availability')
         }, error => {
